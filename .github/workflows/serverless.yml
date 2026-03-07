@@ -1,4 +1,4 @@
-name: Dev
+name: Workers Deploy
 on:
   push:
     branches:
