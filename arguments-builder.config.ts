@@ -20,6 +20,19 @@ export default defineConfig({
 				path: "./dist/iRingo.Maps.stoverride",
 				template: "./template/stash.handlebars",
 			},
+			// Workers
+			{
+				path: "./dist/iRingo.Maps.Workers.sgmodule",
+				template: "./template/surge.workers.handlebars",
+			},
+			{
+				path: "./dist/iRingo.Maps.Workers.plugin",
+				template: "./template/loon.workers.handlebars",
+			},
+			{
+				path: "./dist/iRingo.Maps.Workers.stoverride",
+				template: "./template/stash.workers.handlebars",
+			},
 		],
 		dts: { isExported: true, path: "./src/types.d.ts" },
 		boxjsSettings: {
