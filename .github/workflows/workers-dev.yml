@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - bun
-      
+
 permissions:
   actions: read
   contents: read
@@ -13,6 +13,7 @@ jobs:
   deploy-dev-workers:
     runs-on: ubuntu-latest
     steps:
+      - run: find . -name "package-lock.json" -not -path "./package-lock.json" -delete
       - name: Checkout Repository
         uses: actions/checkout@v4
         with:
@@ -20,7 +21,6 @@ jobs:
           token: ${{ secrets.SUBMODULE_TOKEN }}
           ref: dev
       - uses: oven-sh/setup-bun@v2
-      - run: find . -name "package-lock.json" -not -path "./package-lock.json" -delete
       - run: bun install
       - name: Deploy Cloudflare Worker
         uses: cloudflare/wrangler-action@v3
