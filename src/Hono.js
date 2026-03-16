@@ -4,6 +4,9 @@ import { Response } from "./process/Response.mjs";
 import { Request } from "./process/Request.mjs";
 /***************** Processing *****************/
 export default new Hono().all("/:rest{.*}", async c => {
+	/* todo */
+	// globalThis.$arguments = url.searchParams.get("Weather_Provider");
+
 	const url = new URL(c.req.url);
 	switch (true) {
 		case url.hostname.startsWith("configuration.ls."):
@@ -22,28 +25,21 @@ export default new Hono().all("/:rest{.*}", async c => {
 			break;
 		}
 	}
+	const raw = await c.req.arrayBuffer();
 	let $request = {
 		method: c.req.method,
 		url: url.toString(),
 		headers: c.req.header(),
-		bodyBytes: await c.req.arrayBuffer().catch(error => {
-			console.info(error);
-			return undefined;
-		}),
+		body: raw.byteLength > 0 ? new TextDecoder().decode(raw) : undefined,
+		bodyBytes: raw.byteLength > 0 ? raw : undefined,
 	};
 	let $response;
 	({ $request, $response } = await Request($request));
-	if ($response) {
-		Object.keys($response.headers).map(k => c.header(k, $response.headers[k]));
-		return c.body($response.body);
+	if (!$response) {
+		$response = await fetch($request);
+		$response = await Response($request, $response);
+		delete $response.headers["content-length"];
 	}
-	$response = await fetch($request);
-	delete $response.headers["content-length"];
-
-	/* todo */
-	// globalThis.$arguments = url.searchParams.get("Weather_Provider");
-
-	$response = await Response($request, $response);
 	Object.keys($response.headers).map(k => c.header(k, $response.headers[k]));
 	return c.body($response.body);
 });

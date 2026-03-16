@@ -16,10 +16,8 @@ jobs:
           submodules: recursive
           token: ${{ secrets.SUBMODULE_TOKEN }}
           ref: dev
-      - name: Install Node Dependencies
-        uses: ./.github/actions/node-build
-        with:
-          package-token: ${{ secrets.PACKAGE_TOKEN }}
+      - uses: oven-sh/setup-bun@v2
+      - run: bun install
       - name: Deploy Cloudflare Worker
         uses: cloudflare/wrangler-action@v3
         with:
