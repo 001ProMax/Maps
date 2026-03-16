@@ -1,7 +1,10 @@
 name: Workers Dev
 on:
   workflow_dispatch:
-
+  push:
+    branches:
+      - bun
+      
 permissions:
   actions: read
   contents: read
