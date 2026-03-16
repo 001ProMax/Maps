@@ -17,7 +17,7 @@ jobs:
           token: ${{ secrets.SUBMODULE_TOKEN }}
           ref: dev
       - uses: oven-sh/setup-bun@v2
-      - run: rm -f src/proto/package-lock.json
+      - run: find . -name "package-lock.json" -not -path "./package-lock.json" -delete
       - run: bun install
       - name: Deploy Cloudflare Worker
         uses: cloudflare/wrangler-action@v3
